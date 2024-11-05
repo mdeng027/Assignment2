@@ -71,7 +71,12 @@ public class ChatClient extends AbstractClient
   {
     try
     {
-      sendToServer(message);
+      if (message.startsWith("#")) {
+        handleCommand(message);
+      }
+      else {
+        sendToServer(message);
+      }
     }
     catch(IOException e)
     {
@@ -80,7 +85,71 @@ public class ChatClient extends AbstractClient
       quit();
     }
   }
-  
+
+  private void handleCommand(String message) {
+    if (message.startsWith("#")) {
+      String[] args = message.split(" ");
+      String command = args[0];
+      switch (command) {
+        case "#quit":
+          quit();
+          break;
+
+        case "#logoff":
+          try {
+            closeConnection();
+          } catch (IOException e) {
+            clientUI.display("ERROR - Could not close connection!");
+          }
+          break;
+
+        case "#sethost":
+          if (this.isConnected()) {
+            clientUI.display("Cannot set host if client is still connected.");
+          } else if (args.length > 1) {
+            this.setHost(args[1]);
+          }
+          break;
+
+        case "#setport":
+          if (this.isConnected()) {
+            clientUI.display("Cannot set port if client is still connected.");
+          } else if (args.length > 1) {
+            try {
+              this.setPort(Integer.parseInt(args[1]));
+            } catch (NumberFormatException e) {
+              clientUI.display("Invalid port number. Please provide a valid integer.");
+            }
+          }
+          break;
+
+        case "#login":
+          if (this.isConnected()) {
+            clientUI.display("Client is already connected.");
+          } else {
+            try {
+              this.openConnection();
+            } catch (IOException e) {
+              clientUI.display("ERROR - Could not open connection!");
+            }
+          }
+          break;
+
+        case "#gethost":
+          clientUI.display("Current host is " + this.getHost());
+          break;
+
+        case "#getport":
+          clientUI.display("Current port is " + this.getPort());
+          break;
+
+        default:
+          clientUI.display("Invalid command: '" + command + "'");
+          break;
+      }
+    }
+  }
+
   /**
    * This method terminates the client.
    */
