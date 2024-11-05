@@ -25,7 +25,7 @@ public class ClientConsole implements ChatIF
   /**
    * The default port to connect on.
    */
-  final public static int DEFAULT_PORT = 5555;
+  final public static int DEFAULT_PORT = 5556;
   
   //Instance variables **********************************************
   
@@ -113,7 +113,7 @@ public class ClientConsole implements ChatIF
   /**
    * This method is responsible for the creation of the Client UI.
    *
-   * @param args[0] The host to connect to.
+   * @param args\[0] The host to connect to.
    */
   public static void main(String[] args) 
   {
