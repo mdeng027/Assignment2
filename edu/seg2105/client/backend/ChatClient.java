@@ -103,11 +103,25 @@ public class ChatClient extends AbstractClient
           }
           break;
 
+        case "#login":
+          if (this.isConnected()) {
+            clientUI.display("Client is already connected.");
+          } else {
+            try {
+              this.openConnection();
+              connectionOpen();
+            } catch (IOException e) {
+              clientUI.display("ERROR - Could not open connection!");
+            }
+          }
+          break;
+
         case "#sethost":
           if (this.isConnected()) {
             clientUI.display("Cannot set host if client is still connected.");
           } else if (args.length > 1) {
             this.setHost(args[1]);
+            System.out.println("Host set to " + getHost());
           }
           break;
 
@@ -117,20 +131,9 @@ public class ChatClient extends AbstractClient
           } else if (args.length > 1) {
             try {
               this.setPort(Integer.parseInt(args[1]));
+              System.out.println("Port set to " + getPort());
             } catch (NumberFormatException e) {
               clientUI.display("Invalid port number. Please provide a valid integer.");
-            }
-          }
-          break;
-
-        case "#login":
-          if (this.isConnected()) {
-            clientUI.display("Client is already connected.");
-          } else {
-            try {
-              this.openConnection();
-            } catch (IOException e) {
-              clientUI.display("ERROR - Could not open connection!");
             }
           }
           break;
@@ -146,6 +149,13 @@ public class ChatClient extends AbstractClient
         default:
           clientUI.display("Invalid command: '" + command + "'");
           break;
+      }
+    } else {
+      try {
+        sendToServer(message);
+      } catch (IOException e) {
+        clientUI.display("ERROR - Could not send message to server. Terminating client.");
+        quit();
       }
     }
   }
@@ -184,6 +194,10 @@ public class ChatClient extends AbstractClient
   @Override
   protected void connectionClosed() {
     clientUI.display("Connection closed");
+  }
+
+  protected void connectionOpen() {
+    clientUI.display("Connection open");
   }
 }
 //End of ChatClient class
