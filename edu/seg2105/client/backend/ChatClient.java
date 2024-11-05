@@ -87,7 +87,6 @@ public class ChatClient extends AbstractClient
   }
 
   private void handleCommand(String message) {
-    if (message.startsWith("#")) {
       String[] args = message.split(" ");
       String command = args[0];
       switch (command) {
@@ -150,14 +149,6 @@ public class ChatClient extends AbstractClient
           clientUI.display("Invalid command: '" + command + "'");
           break;
       }
-    } else {
-      try {
-        sendToServer(message);
-      } catch (IOException e) {
-        clientUI.display("ERROR - Could not send message to server. Terminating client.");
-        quit();
-      }
-    }
   }
 
   /**
@@ -169,7 +160,9 @@ public class ChatClient extends AbstractClient
     {
       closeConnection();
     }
-    catch(IOException e) {}
+    catch(IOException e) {
+      System.out.println("ERROR - Could not close connection!");
+    }
     System.exit(0);
   }
 

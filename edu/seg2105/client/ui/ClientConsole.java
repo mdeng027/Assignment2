@@ -26,6 +26,7 @@ public class ClientConsole implements ChatIF
    * The default port to connect on.
    */
   final public static int DEFAULT_PORT = 5556;
+  // TODO change to 5555 after
   
   //Instance variables **********************************************
   
