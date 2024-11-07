@@ -78,7 +78,7 @@ public class ChatClient extends AbstractClient {
         }
     }
 
-    private void handleCommand(String message) {
+    public void handleCommand(String message) {
         String[] args = message.split(" ");
         String command = args[0];
         switch (command) {

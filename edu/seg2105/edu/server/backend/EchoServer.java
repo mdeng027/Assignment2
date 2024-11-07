@@ -94,8 +94,7 @@ public class EchoServer extends AbstractServer {
     /**
      * Implemented the hook method called each time an exception is thrown in a
      * ConnectionToClient thread.
-     * The method may be overridden by subclasses but should remains
-     * synchronized.
+     * The method may be overridden by subclasses but should remain synchronized.
      *
      * @param client     the client that raised the exception.
      * @param \Throwable the exception thrown.
@@ -109,8 +108,11 @@ public class EchoServer extends AbstractServer {
         this.sendToAllClients(message);
     }
 
-    private void handleCommand(String message) {
-        if (message.startsWith("#")) {
+    public void handleCommand(String message) {
+        if (!message.startsWith("#")) {
+            sendToAllClients("SERVER MSG> " + message);
+            return;
+        } else if (message.startsWith("#")) {
             String[] args = message.split(" ");
             String command = args[0];
             switch (command) {
@@ -118,7 +120,7 @@ public class EchoServer extends AbstractServer {
                     try {
                         this.close();
                     } catch (Exception e) {
-                        System.exit(1);
+                        System.exit(0);
                     }
                     break;
 
@@ -131,7 +133,8 @@ public class EchoServer extends AbstractServer {
                         this.close();
                     } catch (Exception e) {
                         System.out.println("ERROR - Could not close connection.");
-                    }                    break;
+                    }
+                    break;
 
                 case "#start":
                     if (!this.isListening()) {
@@ -146,11 +149,16 @@ public class EchoServer extends AbstractServer {
                     break;
 
                 case "#setport":
-                    if (!this.isListening() && this.getNumberOfClients() < 1) {
-                        super.setPort(Integer.parseInt(args[1]));
-                        System.out.println("Port is set to " + (args[1]));
+                    if (!isListening() && getNumberOfClients() == 0) {
+                        try {
+                            int port = Integer.parseInt(args[1]);
+                            setPort(port);
+                            System.out.println("Port set to " + port);
+                        } catch (Exception e) {
+                            System.err.println("ERROR - Invalid port number.");
+                        }
                     } else {
-                        System.out.println("ERROR - Server is still connected.");
+                        System.out.println("ERROR - Server must be closed and no clients connected to set port.");
                     }
                     break;
 
@@ -163,7 +171,15 @@ public class EchoServer extends AbstractServer {
                     break;
             }
         } else {
-            this.sendToAllClients(message);
+            sendToAllClients(message);
+        }
+    }
+
+    public void handleMessageFromServerUI(String message) {
+        if (message.startsWith("#")) {
+            handleCommand(message);
+        } else {
+            handleMessageFromServer(message);
         }
     }
 

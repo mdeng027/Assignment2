@@ -5,8 +5,8 @@ import edu.seg2105.edu.server.backend.EchoServer;
 
 import java.util.Scanner;
 
-
 public class ServerConsole implements ChatIF {
+    // TODO change to 5555 after
     final public static int DEFAULT_PORT = 5556;
     EchoServer server;
     Scanner fromConsole;
@@ -28,7 +28,7 @@ public class ServerConsole implements ChatIF {
 
             while (true) {
                 message = fromConsole.nextLine();
-                server.handleMessageFromServer(message);
+                server.handleMessageFromServerUI(message);
             }
         } catch (Exception ex) {
             System.out.println("Unexpected error while reading from console!");
@@ -38,7 +38,11 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        System.out.println("SERVER MSG > " + message);
+        if(message.startsWith("#")){
+            server.handleCommand(message);
+        } else {
+            System.out.println("SERVER MSG> " + message);
+        }
     }
 
     /**
@@ -64,6 +68,9 @@ public class ServerConsole implements ChatIF {
         } catch (Exception ex) {
             System.out.println("ERROR - Could not listen for clients!");
         }
+
+        ServerConsole console = new ServerConsole(port);
+        console.accept();
     }
 
 }
