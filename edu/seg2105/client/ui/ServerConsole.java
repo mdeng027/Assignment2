@@ -28,7 +28,7 @@ public class ServerConsole implements ChatIF {
 
             while (true) {
                 message = fromConsole.nextLine();
-                server.handleMessageFromServerUI(message);
+                server.handleMessageFromServer(message);
             }
         } catch (Exception ex) {
             System.out.println("Unexpected error while reading from console!");

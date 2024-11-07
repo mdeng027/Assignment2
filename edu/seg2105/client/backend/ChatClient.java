@@ -111,8 +111,10 @@ public class ChatClient extends AbstractClient {
                 if (this.isConnected()) {
                     clientUI.display("Cannot set host if client is still connected.");
                 } else if (args.length > 1) {
-                    this.setHost(args[1]);
+                    super.setHost(args[1]);
                     System.out.println("Host set to " + getHost());
+                } else {
+                    clientUI.display("To sethost: #sethost <host>");
                 }
                 break;
 
@@ -121,11 +123,13 @@ public class ChatClient extends AbstractClient {
                     clientUI.display("Cannot set port if client is still connected.");
                 } else if (args.length > 1) {
                     try {
-                        this.setPort(Integer.parseInt(args[1]));
+                        super.setPort(Integer.parseInt(args[1]));
                         System.out.println("Port set to " + getPort());
                     } catch (NumberFormatException e) {
                         clientUI.display("Invalid port number. Please provide a valid integer.");
                     }
+                } else {
+                    clientUI.display("To setport: #setport <port>");
                 }
                 break;
 

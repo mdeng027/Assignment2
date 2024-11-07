@@ -382,7 +382,7 @@ public abstract class AbstractServer implements Runnable
 	 * synchronized.
 	 *
 	 * @param client the client that raised the exception.
-	 * @param Throwable the exception thrown.
+	 * @param \Throwable the exception thrown.
 	 */
 	synchronized protected void clientException(
 		ConnectionToClient client, Throwable exception) {}
