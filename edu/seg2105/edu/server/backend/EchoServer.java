@@ -170,16 +170,21 @@ public class EchoServer extends AbstractServer {
 
                 case "#setport":
                     if (!isListening() && getNumberOfClients() == 0) {
-                        try {
-                            int port = Integer.parseInt(args[1]);
-                            setPort(port);
-                            System.out.println("Port set to " + port);
-                        } catch (Exception e) {
-                            System.err.println("ERROR - Invalid port number.");
+                        if (args.length > 1) {
+                            try {
+                                int port = Integer.parseInt(args[1]);
+                                super.setPort(port);
+                                System.out.println("Port set to " + getPort());
+                            } catch (NumberFormatException e) {
+                                serverUI.display("ERROR - Invalid port number. Please provide a valid integer.");
+                            }
+                        } else {
+                            serverUI.display("To setport: #setport <port>");
                         }
                     } else {
                         System.out.println("ERROR - Server must be closed and no clients connected to set port.");
                     }
+
                     break;
 
                 case "#getport":
