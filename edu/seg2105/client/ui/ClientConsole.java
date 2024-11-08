@@ -92,7 +92,7 @@ public class ClientConsole implements ChatIF {
     @Override
     public void display(String message) {
         if (message.startsWith("SERVER MSG >")) {
-            System.out.println("From Server: " + message.substring("SERVER MSG >".length()).trim());
+            System.out.println("SERVER MSG > " + message.substring("SERVER MSG >".length()).trim());
         } else {
             System.out.println("> " + message);
         }

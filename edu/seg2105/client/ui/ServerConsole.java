@@ -42,11 +42,7 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        if (message.startsWith("#")) {
-            server.handleCommand(message);
-        } else {
-            System.out.println("SERVER MSG> " + message);
-        }
+        System.out.println("SERVER MSG> " + message);
     }
 
     /**
