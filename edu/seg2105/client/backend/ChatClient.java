@@ -1,5 +1,5 @@
 // This file contains material supporting section 3.7 of the textbook:
-// "Object Oriented Software Engineering" and is issued under the open-source
+// "Object-Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
 package edu.seg2105.client.backend;
@@ -21,7 +21,7 @@ import edu.seg2105.client.common.*;
 public class ChatClient extends AbstractClient {
     //Instance variables **********************************************
 
-    private String loginID;
+    private final String loginID;
 
     /**
      * The interface type variable.  It allows the implementation of
@@ -126,7 +126,7 @@ public class ChatClient extends AbstractClient {
                     super.setHost(args[1]);
                     System.out.println("Host set to " + getHost());
                 } else {
-                    clientUI.display("To sethost: #sethost <host>");
+                    clientUI.display("To set host: #sethost <host>");
                 }
                 break;
 
@@ -141,7 +141,7 @@ public class ChatClient extends AbstractClient {
                         clientUI.display("Invalid port number. Please provide a valid integer.");
                     }
                 } else {
-                    clientUI.display("To setport: #setport <port>");
+                    clientUI.display("To set port: #setport <port>");
                 }
                 break;
 
@@ -186,7 +186,7 @@ public class ChatClient extends AbstractClient {
 
     /**
      * Implemented the hook method called after the connection has been closed. The default
-     * implementation does nothing. The method may be overriden by subclasses to
+     * implementation does nothing. The method may be overridden by subclasses to
      * perform special processing such as cleaning up and terminating, or
      * attempting to reconnect.
      */

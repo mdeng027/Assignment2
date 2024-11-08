@@ -1,6 +1,6 @@
 package edu.seg2105.edu.server.backend;
 // This file contains material supporting section 3.7 of the textbook:
-// "Object Oriented Software Engineering" and is issued under the open-source
+// "Object-Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
 
 
@@ -104,8 +104,8 @@ public class EchoServer extends AbstractServer {
      * ConnectionToClient thread.
      * The method may be overridden by subclasses but should remain synchronized.
      *
-     * @param client     the client that raised the exception.
-     * @param \Throwable the exception thrown.
+     * @param client    the client that raised the exception.
+     * @param exception Throwable the exception thrown.
      */
     @Override
     synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
@@ -128,7 +128,6 @@ public class EchoServer extends AbstractServer {
     public void handleCommand(String message) {
         if (!message.startsWith("#")) {
             sendToAllClients("SERVER MSG> " + message);
-            return;
         } else if (message.startsWith("#")) {
             String[] args = message.split(" ");
             String command = args[0];
@@ -179,7 +178,7 @@ public class EchoServer extends AbstractServer {
                                 serverUI.display("ERROR - Invalid port number. Please provide a valid integer.");
                             }
                         } else {
-                            serverUI.display("To setport: #setport <port>");
+                            serverUI.display("To set port: #setport <port>");
                         }
                     } else {
                         System.out.println("ERROR - Server must be closed and no clients connected to set port.");

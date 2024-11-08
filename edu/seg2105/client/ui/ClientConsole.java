@@ -1,6 +1,6 @@
 package edu.seg2105.client.ui;
 // This file contains material supporting section 3.7 of the textbook:
-// "Object Oriented Software Engineering" and is issued under the open-source
+// "Object-Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
 import java.io.*;
@@ -49,9 +49,9 @@ public class ClientConsole implements ChatIF {
      * @param host The host to connect to.
      * @param port The port to connect on.
      */
-    public ClientConsole(String host, int port) {
+    public ClientConsole(String loginID, String host, int port) {
         try {
-            client = new ChatClient(host, port, this);
+            client = new ChatClient(loginID, host, port, this);
         } catch (IOException exception) {
             System.out.println("Error: Can't setup connection!"
                     + " Terminating client.");
@@ -104,9 +104,9 @@ public class ClientConsole implements ChatIF {
     /**
      * This method is responsible for the creation of the Client UI.
      *
-     * @param args\[0] The login ID of the client.
-     * @param args\[1] The host to connect to.
-     * @param args\[2] The port to connect to.
+     * @param   args\[0] The login ID of the client.
+     *          args\[1] The host to connect to.
+     *          args\[2] The port to connect to.
      */
     public static void main(String[] args) {
         if (args.length ==  0) {
@@ -117,9 +117,6 @@ public class ClientConsole implements ChatIF {
         String loginID = args[0];
         String host = "";
         int port = 0;
-
-//        if (args.length > 1) host = args[1];
-//        if (args.length > 2) port = Integer.parseInt(args[2]);
 
         try {
             host = args[0];
@@ -133,7 +130,6 @@ public class ClientConsole implements ChatIF {
         }
         ClientConsole chat = new ClientConsole(host, DEFAULT_PORT);
         chat.accept();  //Wait for console data
-//        new Thread(chat::accept).start();
     }
 }
 //End of ConsoleChat class
