@@ -134,7 +134,7 @@ public class EchoServer extends AbstractServer {
                     break;
 
                 case "#stop":
-                    this.stopListening();
+                    stopListening();
                     break;
 
                 case "#close":
@@ -149,7 +149,7 @@ public class EchoServer extends AbstractServer {
                 case "#start":
                     if (!this.isListening()) {
                         try {
-                            this.listen();
+                            listen();
                         } catch (Exception e) {
                             System.out.println("ERROR - Could not start listening for clients.");
                         }

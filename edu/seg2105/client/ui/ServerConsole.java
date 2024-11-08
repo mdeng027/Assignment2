@@ -3,6 +3,7 @@ package edu.seg2105.client.ui;
 import edu.seg2105.client.common.ChatIF;
 import edu.seg2105.edu.server.backend.EchoServer;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ServerConsole implements ChatIF {
@@ -11,13 +12,16 @@ public class ServerConsole implements ChatIF {
     EchoServer server;
     Scanner fromConsole;
 
-    public ServerConsole(int port) {
+    public ServerConsole(int port, ChatIF serverUI) {
+        server = new EchoServer(port, this);
+
         try {
-            server = new EchoServer(port);
-        } catch (Exception exception) {
-            System.out.println("ERROR - Failed to setup server!");
-            System.exit(1);
+            server.listen(); // Start listening for client conncetions
+        } catch (IOException e) {
+            System.err.println("ERROR - Could not listen for clients!");
         }
+
+        // Create scanner object to read from console
         fromConsole = new Scanner(System.in);
     }
 
@@ -38,7 +42,7 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        if(message.startsWith("#")){
+        if (message.startsWith("#")) {
             server.handleCommand(message);
         } else {
             System.out.println("SERVER MSG> " + message);
@@ -61,16 +65,7 @@ public class ServerConsole implements ChatIF {
             port = DEFAULT_PORT; //Set port to 5555
         }
 
-        EchoServer sv = new EchoServer(port);
-
-        try {
-            sv.listen(); //Start listening for connections
-        } catch (Exception ex) {
-            System.out.println("ERROR - Could not listen for clients!");
-        }
-
-        ServerConsole console = new ServerConsole(port);
+        ServerConsole console = new ServerConsole(port, null);
         console.accept();
     }
-
 }

@@ -52,8 +52,6 @@ public class ClientConsole implements ChatIF {
     public ClientConsole(String host, int port) {
         try {
             client = new ChatClient(host, port, this);
-
-
         } catch (IOException exception) {
             System.out.println("Error: Can't setup connection!"
                     + " Terminating client.");
@@ -92,7 +90,11 @@ public class ClientConsole implements ChatIF {
      * @param message The string to be displayed.
      */
     public void display(String message) {
-        System.out.println("> " + message);
+        if (message.startsWith("SERVER MSG >")) {
+            System.out.println("From Server: " + message.substring("SERVER MSG >".length()).trim());
+        } else {
+            System.out.println("> " + message);
+        }
     }
 
 

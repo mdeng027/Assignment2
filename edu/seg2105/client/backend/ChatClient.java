@@ -88,8 +88,8 @@ public class ChatClient extends AbstractClient {
                 break;
 
             case "#logoff":
-                clientUI.display("Logging off.");
                 try {
+                    clientUI.display("Logging off.");
                     closeConnection();
                 } catch (IOException e) {
                     clientUI.display("ERROR - Could not close connection!");
@@ -97,11 +97,11 @@ public class ChatClient extends AbstractClient {
                 break;
 
             case "#login":
-                clientUI.display("Logging in.");
                 if (this.isConnected()) {
                     clientUI.display("Client is already connected.");
                 } else {
                     try {
+                        clientUI.display("Logging in.");
                         this.openConnection();
                         connectionOpen();
                     } catch (IOException e) {
