@@ -4,6 +4,7 @@ package edu.seg2105.edu.server.backend;
 // license found at www.lloseng.com 
 
 
+import edu.seg2105.client.common.ChatIF;
 import ocsf.server.*;
 
 import java.io.IOException;
@@ -26,6 +27,12 @@ public class EchoServer extends AbstractServer {
     final public static int DEFAULT_PORT = 5556;
     // TODO change to 5555 after
 
+    /**
+     * The interface type variable.  It allows the implementation of
+     * the display method in the server.
+     */
+    ChatIF serverUI;
+
     //Constructors ****************************************************
 
     /**
@@ -33,8 +40,9 @@ public class EchoServer extends AbstractServer {
      *
      * @param port The port number to connect on.
      */
-    public EchoServer(int port) {
+    public EchoServer(int port, ChatIF serverUI) {
         super(port);
+        this.serverUI = serverUI;
     }
 
 
@@ -117,9 +125,10 @@ public class EchoServer extends AbstractServer {
             String command = args[0];
             switch (command) {
                 case "#quit":
+                    serverUI.display("Terminating server");
                     try {
-                        this.close();
-                    } catch (Exception e) {
+                        close();
+                    } catch (IOException e) {
                         System.exit(0);
                     }
                     break;
@@ -129,9 +138,10 @@ public class EchoServer extends AbstractServer {
                     break;
 
                 case "#close":
+                    serverUI.display("Closing all client connections.");
                     try {
-                        this.close();
-                    } catch (Exception e) {
+                        close();
+                    } catch (IOException e) {
                         System.out.println("ERROR - Could not close connection.");
                     }
                     break;

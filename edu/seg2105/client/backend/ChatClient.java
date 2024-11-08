@@ -83,10 +83,12 @@ public class ChatClient extends AbstractClient {
         String command = args[0];
         switch (command) {
             case "#quit":
+                clientUI.display("Terminating connection.");
                 quit();
                 break;
 
             case "#logoff":
+                clientUI.display("Logging off.");
                 try {
                     closeConnection();
                 } catch (IOException e) {
@@ -95,6 +97,7 @@ public class ChatClient extends AbstractClient {
                 break;
 
             case "#login":
+                clientUI.display("Logging in.");
                 if (this.isConnected()) {
                     clientUI.display("Client is already connected.");
                 } else {
