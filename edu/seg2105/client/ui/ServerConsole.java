@@ -12,7 +12,7 @@ public class ServerConsole implements ChatIF {
     EchoServer server;
     Scanner fromConsole;
 
-    public ServerConsole(int port, ChatIF serverUI) {
+    public ServerConsole(int port) {
         server = new EchoServer(port, this);
 
         try {
@@ -42,7 +42,7 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        System.out.println("SERVER MSG> " + message);
+        System.out.println(message);
     }
 
     /**
@@ -61,7 +61,8 @@ public class ServerConsole implements ChatIF {
             port = DEFAULT_PORT; //Set port to 5555
         }
 
-        ServerConsole console = new ServerConsole(port, null);
-        console.accept();
+        ServerConsole console = new ServerConsole(port);
+        // console.accept();
+        new Thread(console::accept).start();
     }
 }

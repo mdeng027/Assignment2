@@ -107,6 +107,7 @@ public class EchoServer extends AbstractServer {
      * @param client     the client that raised the exception.
      * @param \Throwable the exception thrown.
      */
+    @Override
     synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
         System.out.println("Client error: " + client.toString() + "exception" + exception.toString());
     }

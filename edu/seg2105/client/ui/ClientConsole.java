@@ -118,10 +118,12 @@ public class ClientConsole implements ChatIF {
             host = "localhost";
             port = DEFAULT_PORT;
         } catch (NumberFormatException e) {
+            System.out.println("ERROR - Invalid port number.");
             port = DEFAULT_PORT;
         }
         ClientConsole chat = new ClientConsole(host, DEFAULT_PORT);
-        chat.accept();  //Wait for console data
+        // chat.accept();  //Wait for console data
+        new Thread(chat::accept).start();
     }
 }
 //End of ConsoleChat class
