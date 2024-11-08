@@ -125,9 +125,10 @@ public class EchoServer extends AbstractServer {
             String command = args[0];
             switch (command) {
                 case "#quit":
-                    serverUI.display("Terminating server");
                     try {
+                        serverUI.display("Terminating server");
                         close();
+                        System.exit(0);
                     } catch (IOException e) {
                         System.exit(0);
                     }

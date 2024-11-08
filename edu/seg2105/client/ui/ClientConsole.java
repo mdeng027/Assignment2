@@ -89,6 +89,7 @@ public class ClientConsole implements ChatIF {
      *
      * @param message The string to be displayed.
      */
+    @Override
     public void display(String message) {
         if (message.startsWith("SERVER MSG >")) {
             System.out.println("From Server: " + message.substring("SERVER MSG >".length()).trim());
