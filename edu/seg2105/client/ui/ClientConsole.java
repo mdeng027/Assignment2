@@ -24,8 +24,7 @@ public class ClientConsole implements ChatIF {
     /**
      * The default port to connect on.
      */
-    final public static int DEFAULT_PORT = 5556;
-    // TODO change to 5555 after
+    final public static int DEFAULT_PORT = 5555;
 
     //Instance variables **********************************************
 
@@ -111,7 +110,7 @@ public class ClientConsole implements ChatIF {
         int port = 0;
 
         try {
-            if (args.length < 1) {
+            if (args.length == 0) {
                 System.out.println("ERROR - No login ID specified.  Connection aborted.");
                 System.exit(1);
             }

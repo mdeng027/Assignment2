@@ -3,14 +3,11 @@ package edu.seg2105.client.ui;
 import edu.seg2105.client.common.ChatIF;
 import edu.seg2105.edu.server.backend.EchoServer;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.*;
 import java.util.Scanner;
 
 public class ServerConsole implements ChatIF {
-    // TODO change to 5555 after
     EchoServer server;
-    final public static int DEFAULT_PORT = 5556;
+    final public static int DEFAULT_PORT = 5555;
     Scanner fromConsole;
 
     public ServerConsole(int port) {
