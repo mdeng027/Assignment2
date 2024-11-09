@@ -3,23 +3,18 @@ package edu.seg2105.client.ui;
 import edu.seg2105.client.common.ChatIF;
 import edu.seg2105.edu.server.backend.EchoServer;
 
-import java.io.IOException;
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.*;
 import java.util.Scanner;
 
 public class ServerConsole implements ChatIF {
     // TODO change to 5555 after
-    final public static int DEFAULT_PORT = 5556;
     EchoServer server;
+    final public static int DEFAULT_PORT = 5556;
     Scanner fromConsole;
 
     public ServerConsole(int port) {
         server = new EchoServer(port, this);
-
-        try {
-            server.listen(); // Start listening for client conncetions
-        } catch (IOException e) {
-            System.err.println("ERROR - Could not listen for clients!");
-        }
 
         // Create scanner object to read from console
         fromConsole = new Scanner(System.in);
@@ -42,7 +37,7 @@ public class ServerConsole implements ChatIF {
 
     @Override
     public void display(String message) {
-        System.out.println(message);
+        System.out.println("> " + message);
     }
 
     /**
@@ -61,8 +56,14 @@ public class ServerConsole implements ChatIF {
             port = DEFAULT_PORT; //Set port to 5555
         }
 
-        ServerConsole console = new ServerConsole(port);
-        // console.accept();
-        new Thread(console::accept).start();
+        ServerConsole sv = new ServerConsole(port);
+
+        try {
+            sv.server.listen(); //Start listening for connections
+        } catch (Exception ex) {
+            System.out.println("ERROR - Could not listen for clients!");
+        }
+        sv.accept();
+
     }
 }

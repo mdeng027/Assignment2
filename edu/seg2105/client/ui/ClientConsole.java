@@ -46,8 +46,9 @@ public class ClientConsole implements ChatIF {
     /**
      * Constructs an instance of the ClientConsole UI.
      *
-     * @param host The host to connect to.
-     * @param port The port to connect on.
+     * @param loginID The login ID of the client.
+     * @param host    The host to connect to.
+     * @param port    The port to connect on.
      */
     public ClientConsole(String loginID, String host, int port) {
         try {
@@ -91,11 +92,7 @@ public class ClientConsole implements ChatIF {
      */
     @Override
     public void display(String message) {
-        if (message.startsWith("SERVER MSG >")) {
-            System.out.println("SERVER MSG > " + message.substring("SERVER MSG >".length()).trim());
-        } else {
-            System.out.println("> " + message);
-        }
+        System.out.println("> " + message);
     }
 
 
@@ -104,23 +101,23 @@ public class ClientConsole implements ChatIF {
     /**
      * This method is responsible for the creation of the Client UI.
      *
-     * @param   args\[0] The login ID of the client.
-     *          args\[1] The host to connect to.
-     *          args\[2] The port to connect to.
+     * @param args\[0] The login ID of the client.
+     *                 args\[1] The host to connect to.
+     *                 args\[2] The port to connect to.
      */
     public static void main(String[] args) {
-        if (args.length ==  0) {
-            System.out.println("ERROR - No login ID specified.  Connection aborted.");
-            System.exit(1);
-        }
-
         String loginID = args[0];
         String host = "";
         int port = 0;
 
         try {
-            host = args[0];
-            port = Integer.parseInt(args[1]);
+            if (args.length < 1) {
+                System.out.println("ERROR - No login ID specified.  Connection aborted.");
+                System.exit(1);
+            }
+            loginID = args[0];
+            host = args[1];
+            port = Integer.parseInt(args[2]);
         } catch (ArrayIndexOutOfBoundsException e) {
             host = "localhost";
             port = DEFAULT_PORT;
@@ -128,7 +125,7 @@ public class ClientConsole implements ChatIF {
             System.out.println("ERROR - Invalid port number.");
             port = DEFAULT_PORT;
         }
-        ClientConsole chat = new ClientConsole(host, DEFAULT_PORT);
+        ClientConsole chat = new ClientConsole(loginID, host, port);
         chat.accept();  //Wait for console data
     }
 }

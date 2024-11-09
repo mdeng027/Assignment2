@@ -21,7 +21,7 @@ import edu.seg2105.client.common.*;
 public class ChatClient extends AbstractClient {
     //Instance variables **********************************************
 
-    private final String loginID;
+    String loginID;
 
     /**
      * The interface type variable.  It allows the implementation of
@@ -57,7 +57,13 @@ public class ChatClient extends AbstractClient {
      * anything they wish.
      */
     protected void connectionEstablished() {
-        sendToServer("#login " + loginID);
+        String loginMessage = "#login " + loginID;
+
+        try {
+            this.sendToServer(loginMessage);
+        } catch (IOException e) {
+            clientUI.display("ERROR - Failed to send login message to server");
+        }
     }
 
     /**

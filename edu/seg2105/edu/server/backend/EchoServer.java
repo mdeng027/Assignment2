@@ -121,84 +121,80 @@ public class EchoServer extends AbstractServer {
         if (message.startsWith("#")) {
             handleCommand(message);
         } else {
-            handleMessageFromServer(message);
+            serverUI.display(message);
+            sendToAllClients("SERVER MSG > " + message);
         }
     }
 
     public void handleCommand(String message) {
-        if (!message.startsWith("#")) {
-            sendToAllClients("SERVER MSG> " + message);
-        } else if (message.startsWith("#")) {
-            String[] args = message.split(" ");
-            String command = args[0];
-            switch (command) {
-                case "#quit":
+        String[] args = message.split(" ");
+        String command = args[0];
+        switch (command) {
+            case "#quit":
+                try {
+                    serverUI.display("Terminating server");
+                    close();
+                    System.exit(0);
+                } catch (IOException e) {
+                    System.exit(0);
+                }
+                break;
+
+            case "#stop":
+                stopListening();
+                break;
+
+            case "#close":
+                serverUI.display("Closing all client connections.");
+                try {
+                    close();
+                } catch (IOException e) {
+                    System.out.println("ERROR - Could not close connection.");
+                }
+                break;
+
+            case "#start":
+                if (!this.isListening()) {
                     try {
-                        serverUI.display("Terminating server");
-                        close();
-                        System.exit(0);
-                    } catch (IOException e) {
-                        System.exit(0);
+                        listen();
+                    } catch (Exception e) {
+                        System.out.println("ERROR - Could not start listening for clients.");
                     }
-                    break;
+                } else {
+                    System.out.println("ERROR - Already listening for clients.");
+                }
+                break;
 
-                case "#stop":
-                    stopListening();
-                    break;
-
-                case "#close":
-                    serverUI.display("Closing all client connections.");
-                    try {
-                        close();
-                    } catch (IOException e) {
-                        System.out.println("ERROR - Could not close connection.");
-                    }
-                    break;
-
-                case "#start":
-                    if (!this.isListening()) {
+            case "#setport":
+                if (!isListening() && getNumberOfClients() == 0) {
+                    if (args.length > 1) {
                         try {
-                            listen();
-                        } catch (Exception e) {
-                            System.out.println("ERROR - Could not start listening for clients.");
+                            int port = Integer.parseInt(args[1]);
+                            super.setPort(port);
+                            System.out.println("Port set to " + getPort());
+                        } catch (NumberFormatException e) {
+                            serverUI.display("ERROR - Invalid port number. Please provide a valid integer.");
                         }
                     } else {
-                        System.out.println("ERROR - Already listening for clients.");
+                        serverUI.display("To set port: #setport <port>");
                     }
-                    break;
+                } else {
+                    System.out.println("ERROR - Server must be closed and no clients connected to set port.");
+                }
 
-                case "#setport":
-                    if (!isListening() && getNumberOfClients() == 0) {
-                        if (args.length > 1) {
-                            try {
-                                int port = Integer.parseInt(args[1]);
-                                super.setPort(port);
-                                System.out.println("Port set to " + getPort());
-                            } catch (NumberFormatException e) {
-                                serverUI.display("ERROR - Invalid port number. Please provide a valid integer.");
-                            }
-                        } else {
-                            serverUI.display("To set port: #setport <port>");
-                        }
-                    } else {
-                        System.out.println("ERROR - Server must be closed and no clients connected to set port.");
-                    }
+                break;
 
-                    break;
+            case "#getport":
+                System.out.println("Current port: " + this.getPort());
+                break;
 
-                case "#getport":
-                    System.out.println("Current port: " + this.getPort());
-                    break;
-
-                default:
-                    System.out.println("Invalid command: '" + command + "'");
-                    break;
-            }
-        } else {
-            sendToAllClients(message);
+            default:
+                System.out.println("Invalid command: '" + command + "'");
+                break;
         }
     }
-
-    //Class methods ***************************************************
 }
+
+//Class methods ***************************************************
+
 //End of EchoServer class
