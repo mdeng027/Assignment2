@@ -28,6 +28,11 @@ public class EchoServer extends AbstractServer {
     // TODO change to 5555 after
 
     /**
+     * The login key of the connecting client.
+     */
+    private final String loginKey = "loginID";
+
+    /**
      * The interface type variable.  It allows the implementation of
      * the display method in the server.
      */
@@ -53,13 +58,33 @@ public class EchoServer extends AbstractServer {
      *
      * @param msg    The message received from the client.
      * @param client The connection from which the message originated.
+     *
+     *
      */
-    public void handleMessageFromClient
-    (Object msg, ConnectionToClient client) {
-        System.out.println("Message received: " + msg + " from " + client);
-        this.sendToAllClients(msg);
-    }
+    public void handleMessageFromClient(Object msg, ConnectionToClient client) {
+        System.out.println("Message received: " + msg + " from " + client.getInfo(loginKey));
 
+        String msgStr = (String) msg;
+
+        if (msgStr.startsWith("#login")) {
+            if (!(client.getInfo(loginKey) == null)) { // if loginKey is not null, thus not first time running #login
+                try {
+                    client.sendToClient("ERROR - #login is only allowed as the first command");
+                    client.close(); // disconnect the client connection
+                } catch (IOException e) {
+                    System.out.println("ERROR - Could not send message to client");
+                }
+            } else {
+                String loginID = msgStr.substring("#login ".length()).trim();
+                client.setInfo(loginKey, loginID);
+                serverUI.display(loginID + "has logged on");
+            }
+        } else { //
+            String loginID = (String) client.getInfo(loginKey);
+            String message = loginID + "> " + msgStr;
+            this.sendToAllClients(message);
+        }
+    }
     /**
      * This method overrides the one in the superclass.  Called
      * when the server starts listening for connections.
@@ -84,7 +109,7 @@ public class EchoServer extends AbstractServer {
      */
     @Override
     protected void clientConnected(ConnectionToClient client) {
-        System.out.println("Client connected: " + client.toString());
+        System.out.println("Client connected");
     }
 
     /**
@@ -96,7 +121,7 @@ public class EchoServer extends AbstractServer {
      */
     @Override
     synchronized protected void clientDisconnected(ConnectionToClient client) {
-        System.out.println("Client disconnected: " + client.toString());
+        System.out.println("Client disconnected.");
     }
 
     /**
@@ -109,12 +134,7 @@ public class EchoServer extends AbstractServer {
      */
     @Override
     synchronized protected void clientException(ConnectionToClient client, Throwable exception) {
-        System.out.println("Client error: " + client.toString() + "exception" + exception.toString());
-    }
-
-    public void handleMessageFromServer(String message) {
-        System.out.println("SERVER MSG > " + message);
-        this.sendToAllClients("SERVER MSG > " + message);
+        clientDisconnected(client);
     }
 
     public void handleMessageFromServerUI(String message) {
