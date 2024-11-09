@@ -27,11 +27,6 @@ public class EchoServer extends AbstractServer {
     final public static int DEFAULT_PORT = 5555;
 
     /**
-     * The login key of the connecting client.
-     */
-    private final String loginKey = "loginID";
-
-    /**
      * The interface type variable.  It allows the implementation of
      * the display method in the server.
      */
@@ -61,12 +56,16 @@ public class EchoServer extends AbstractServer {
      *
      */
     public void handleMessageFromClient(Object msg, ConnectionToClient client) {
+        /**
+         * The login key of the connecting client.
+         */
+        String loginKey = "loginID";
         System.out.println("Message received: " + msg + " from " + client.getInfo(loginKey));
 
         String msgStr = (String) msg;
 
         if (msgStr.startsWith("#login")) {
-            if (!(client.getInfo(loginKey) == null)) { // if loginKey is not null, thus not first time running #login
+            if (client.getInfo(loginKey) != null) { // if loginKey is not null, thus not first time running #login
                 try {
                     client.sendToClient("ERROR - #login is only allowed as the first command");
                     client.close(); // disconnect the client connection
@@ -78,7 +77,7 @@ public class EchoServer extends AbstractServer {
                 client.setInfo(loginKey, loginID);
                 serverUI.display(loginID + "has logged on");
             }
-        } else { //
+        } else {
             String loginID = (String) client.getInfo(loginKey);
             String message = loginID + "> " + msgStr;
             this.sendToAllClients(message);
